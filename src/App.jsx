@@ -11,8 +11,6 @@ function App() {
     const [CSVData, setCSVData] = useState([]);
     var commonConfig = { delimiter: "," };
 
-    console.log("CSVData", CSVData);
-
     function parseCSVData(file) {
         Papa.parse(file, {
             ...commonConfig,
@@ -70,7 +68,7 @@ Your Participation Details:
 
 Events Registered: ${allEvent}
 
-Payment Confirmation: Online
+Payment Confirmation: Online 
 Amount: ${data["Amount To pay:"]}
 
 Transaction ID: ${data["Add Transaction ID"]}
