@@ -44,3 +44,13 @@
 .code-copy:hover svg path {
     fill: white;
 }
+
+.text-color {
+    text-align: center;
+    font-size: x-large;
+}
+
+.done {
+    background-color:rgb(34 197 94);
+    border-radius:8px;
+}

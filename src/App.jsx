@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     const [CSVData, setCSVData] = useState([]);
+    const [complate, setComplate] = useState([]);
+    const [complateSub, setComplateSub] = useState([]);
     var commonConfig = { delimiter: "," };
 
     function parseCSVData(file) {
@@ -39,6 +41,7 @@ function App() {
                         }
                     }}
                 />
+
             </div>
             {CSVData.length > 0 &&
                 CSVData.map((data) => {
@@ -56,11 +59,21 @@ function App() {
 
                     const allEvent = [...comEvent, ...civilEvent, ...mecEvent, ...ecEvent, ...mscEvent, ...itEvent, ...hssEvent, ...bisEvent, ...dronEvent].join(", ");
 
-                    const user = data["Full Name (First name + Last Name)"];
+                    const user = data["Tickit no:"];
 
-                    const content = `${data["Email"]}
+                    let subject = "";
+                    let cont = "";
+                    const sub = complateSub.includes(user);
+                    const con = complate.includes(user);
 
-Dear ${data["Full Name (First name + Last Name)"]},
+                    if (sub && con) {
+                        subject += "done";
+                        cont += "done";
+                    }
+                    else if (sub && !con) subject += "done";
+                    else if (!sub && con) cont += "done";
+
+                    const content = `Dear ${data["Full Name (First name + Last Name)"]},
     
 Congratulations! We are thrilled to confirm your registration for Vaividhya 2024, a spectacular two-day event scheduled for March 1-2, 2024, at SSASIT, Surat.
 
@@ -91,28 +104,44 @@ Best regards,
 Vaividhya Registration Team
 SSASIT - Surat`
                     return (
+                        <>
                         <div className="code-box" key={data["Tickit no:"]}>
-                            <Markdown className="code-content">
-                                {content}
-                            </Markdown>
-                            <img className="code-copy" src={Copy} alt="" onClick={() => {
-                                navigator.clipboard.writeText(content);
-                                toast.success(`${user} Copied.`)
-                            }} />
-                            <ToastContainer
-                                position="top-right"
-                                autoClose={5000}
-                                hideProgressBar={false}
-                                newestOnTop={false}
-                                closeOnClick
-                                rtl={false}
-                                pauseOnFocusLoss
-                                draggable
-                                pauseOnHover
-                                theme="light"
-                                transition: Bounce
-                            />
+                            <div className={`text-color`}>{data["Tickit no:"]}</div>
+                            <div className={`code-box ${subject}`} key={data["Tickit no:"]}>
+                                <Markdown className="code-content">
+                                    {`Confirmation of Registration for Vaividhya 2024`}
+                                </Markdown>
+                                <img className="code-copy" src={Copy} alt="" onClick={() => {
+                                    setComplateSub([user, ...complateSub]);
+                                    navigator.clipboard.writeText(content);
+                                    // toast.success(`${user} Subject Copied.`)
+                                }} />
+                            </div>
+                            <div className={`code-box ${cont}`} key={data["Tickit no:"]}>
+                                <Markdown className="code-content">
+                                    {content}
+                                </Markdown>
+                                <img className="code-copy" src={Copy} alt="" onClick={() => {
+                                    setComplate([user, ...complate]);
+                                    navigator.clipboard.writeText(content);
+                                    // toast.success(`${user} Body Copied.`)
+                                }} />
+                            </div>
                         </div>
+                                {/* <ToastContainer
+                                    position="top-right"
+                                    autoClose={5000}
+                                    hideProgressBar={false}
+                                    newestOnTop={false}
+                                    closeOnClick
+                                    rtl={false}
+                                    pauseOnFocusLoss
+                                    draggable
+                                    pauseOnHover
+                                    theme="light"
+                                    transition: Bounce
+                                /> */}
+                        </>
                     )
                 })}
         </>
