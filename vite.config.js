@@ -9,4 +9,7 @@ export default defineConfig({
     strictPort: true,
     port: 8000,
   },
+  optimizeDeps: {
+    exclude: ['js-big-decimal']
+  }
 })

@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 import Papa from "papaparse";
 import Markdown from "react-markdown";
 import Copy from "./copy.svg";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import lodash from "lodash";
 
 function App() {
     const [CSVData, setCSVData] = useState([]);
+    const [JSONData, setJSONData] = useState([]);
+    const [JSONFinalData, setJSONFinalData] = useState({});
+    const [downloadBtn, setDownloadBtn] = useState(false);
     const [complate, setComplate] = useState([]);
     const [complateSub, setComplateSub] = useState([]);
+    const [option, setOption] = useState("1");
     var commonConfig = { delimiter: "," };
 
     function parseCSVData(file) {
@@ -24,9 +28,119 @@ function App() {
         });
     }
 
+    function convertToCSV(json) {
+        const config = {
+            quotes: false, //or array of booleans
+            quoteChar: '"',
+            escapeChar: '"',
+            delimiter: ",",
+            header: true,
+            newline: "\r\n",
+            columns: null //or array of strings
+        }
+        return Papa.unparse(json,[config]);
+      }
+
+    const unwind = (key, obj) => {
+        const { [key]: _, ...rest } = obj;
+        return obj[key].map(val => ({ ...rest, [key]: val }));
+    };
+
+    const downloadFile = (data, value) => {
+        const csv = convertToCSV(data);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${value}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    useEffect(() => {
+        if (Object.keys(JSONFinalData).length > 0) {
+            setTimeout(() => {
+                setDownloadBtn(true);
+            }, 5000);
+        }
+    }, [JSONFinalData])
+    
+    useEffect(() => {
+        const filterData = JSONData.filter(data => data["Tickit no:"] !== "");
+        
+        const finalData = filterData.map(data => {
+            return unwind("allEvent", data);
+        });
+
+        const groupData = lodash.groupBy(finalData.flat(), 'allEvent');
+        setJSONFinalData({...groupData});
+    }, [JSONData])
+
+    function dowloadFile(file) {
+        Papa.parse(file, {
+            ...commonConfig,
+            header: true,
+            download: true,
+            complete: (result) => {
+                let res = [...result.data]
+                res = res.map(data => {
+                    data["Computer Engineering Events"] = data["Computer Engineering Events"] && data["Computer Engineering Events"] !== "" ? JSON.parse(data["Computer Engineering Events"]) : [];
+                    data["Civil Engineering Events"] = data["Civil Engineering Events"] && data["Civil Engineering Events"] !== "" ? JSON.parse(data["Civil Engineering Events"]) : [];
+                    data["Mechanical Engineering Events"] = data["Mechanical Engineering Events"] && data["Mechanical Engineering Events"] !== "" ? JSON.parse(data["Mechanical Engineering Events"]) : [];
+                    data["E & C Engineering Events"] = data["E & C Engineering Events"] && data["E & C Engineering Events"] !== "" ? JSON.parse(data["E & C Engineering Events"]) : [];
+                    data["MSC IT Events"] = data["MSC IT Events"] && data["MSC IT Events"] !== "" ? JSON.parse(data["MSC IT Events"]) : [];
+                    data["Information Technology Events"] = data["Information Technology Events"] && data["Information Technology Events"] !== "" ? JSON.parse(data["Information Technology Events"]) : [];
+                    data["H & SS Events"] = data["H & SS Events"] && data["H & SS Events"] !== "" ? JSON.parse(data["H & SS Events"]) : [];
+                    data["BIS Event"] = data["BIS Event"] && data["BIS Event"] !== "" ? JSON.parse(data["BIS Event"]) : [];
+                    data["Drone Event (E & C Dept)"] = data["Drone Event (E & C Dept)"] && data["Drone Event (E & C Dept)"] !== "" ? JSON.parse(data["Drone Event (E & C Dept)"]) : [];
+                    
+                    data['allEvent'] = [...data["Computer Engineering Events"], ...data["Civil Engineering Events"], ...data["Mechanical Engineering Events"], ...data["E & C Engineering Events"], ...data["MSC IT Events"], ...data["Information Technology Events"], ...data["H & SS Events"], ...data["BIS Event"], ...data["Drone Event (E & C Dept)"]];
+                    
+                    return data;
+                });
+                setJSONData([...res]);
+
+            },
+        });
+    }
+
     return (
         <>
-            <div className="App">
+                    <input 
+                        type="radio"
+                        id="option1"
+                        value="1"
+                        checked={ 
+                            option === '1'
+                        } 
+                        onChange={() => 
+                            setOption( 
+                                "1"
+                            ) 
+                        } 
+                    /> 
+                    <label 
+                        htmlFor="option1"
+                    >For mail</label> 
+                    <input 
+                        type="radio"
+                        id="option1"
+                        value="2"
+                        checked={ 
+                            option === '2'
+                        } 
+                        onChange={() => 
+                            setOption( 
+                                "2"
+                            ) 
+                        } 
+                    /> 
+                    <label 
+                        htmlFor="option1"
+                    >Download The Event according csv file</label> 
+            {option === '1' && (<>
+                <div className="App">
                 <h2 className="file-upload-heading" htmlFor="">
                     Upload file hear.
                 </h2>
@@ -144,6 +258,31 @@ SSASIT - Surat`
                         </>
                     )
                 })}
+            </>)}
+
+            {option === '2' && (<>
+                <div className="App">
+                <h2 className="file-upload-heading" htmlFor="">
+                    Upload file hear.
+                </h2>
+                <input
+                    className="input-file"
+                    type="file"
+                    accept=".csv,.xlsx,.xls"
+                    onChange={(e) => {
+                        const files = e.target.files;
+                        if (files) {
+                            dowloadFile(files[0]);
+                        }
+                    }}
+                />
+                {downloadBtn && (<button className="btn"onClick={() => {
+                    for (const [key, value] of Object.entries(JSONFinalData)) {
+                        downloadFile(value, key)
+                      }
+                }} >Download</button>)}
+            </div>
+            </>)}
         </>
     );
 }
