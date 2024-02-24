@@ -58,3 +58,15 @@
 .btn {
     margin: 10px;
 }
+
+a {
+    padding: 10px;
+    margin: 10px;
+    text-decoration: none;
+    color: white;
+    background: #16a34a;
+}
+
+.link-sparater {
+    padding-bottom: 24px;
+}

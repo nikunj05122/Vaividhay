@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import "./App.css";
 
@@ -6,6 +8,7 @@ import Markdown from "react-markdown";
 import Copy from "./copy.svg";
 import 'react-toastify/dist/ReactToastify.css';
 import lodash from "lodash";
+import JSZip from "jszip";
 
 function App() {
     const [CSVData, setCSVData] = useState([]);
@@ -16,6 +19,9 @@ function App() {
     const [complateSub, setComplateSub] = useState([]);
     const [option, setOption] = useState("1");
     var commonConfig = { delimiter: "," };
+
+    const zip = new JSZip();
+
 
     function parseCSVData(file) {
         Papa.parse(file, {
@@ -46,23 +52,49 @@ function App() {
         return obj[key].map(val => ({ ...rest, [key]: val }));
     };
 
-    const downloadFile = (data, value) => {
+    const downloadFile = (data, value, i) => {
         const csv = convertToCSV(data);
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
+        zip.file(`${i} ${value}.csv`, blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${value}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        a.download = `${i} ${value}.csv`;
+        const sparater = document.createElement('div');
+        sparater.className="link-sparater"
+        document.getElementById("all-link").appendChild(a);
+        document.getElementById("all-link").appendChild(sparater);
+        a.innerText = `${i} ${value}.csv`
     }
+
+    const downloadAll = async () => {
+        const zipData = await zip.generateAsync({
+            type: "blob",
+            streamFiles: true,
+          });
+
+          const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(zipData);
+        link.download = "Event-wise-data.zip";
+        link.click();
+        document.removeChild(link);
+    }
+
+    useEffect(() => {
+        if (downloadBtn) {
+            let i = 1;
+            for (const [key, value] of Object.entries(JSONFinalData)) {
+                downloadFile(value, key, i);
+                i++;
+            }
+        } 
+    }, [downloadBtn])
 
     useEffect(() => {
         if (Object.keys(JSONFinalData).length > 0) {
             setTimeout(() => {
                 setDownloadBtn(true);
-            }, 5000);
+            }, 2000);
         }
     }, [JSONFinalData])
     
@@ -266,7 +298,7 @@ SSASIT - Surat`
                     Upload file hear.
                 </h2>
                 <input
-                    className="input-file"
+                    className="input-file link-sparater"
                     type="file"
                     accept=".csv,.xlsx,.xls"
                     onChange={(e) => {
@@ -276,11 +308,8 @@ SSASIT - Surat`
                         }
                     }}
                 />
-                {downloadBtn && (<button className="btn"onClick={() => {
-                    for (const [key, value] of Object.entries(JSONFinalData)) {
-                        downloadFile(value, key)
-                      }
-                }} >Download</button>)}
+                {downloadBtn && (<button className="btn"onClick={() => downloadAll()} >Download All</button>)}
+                <div id="all-link"></div>
             </div>
             </>)}
         </>
