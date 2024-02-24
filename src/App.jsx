@@ -259,7 +259,7 @@ SSASIT - Surat`
                                 </Markdown>
                                 <img className="code-copy" src={Copy} alt="" onClick={() => {
                                     setComplateSub([user, ...complateSub]);
-                                    navigator.clipboard.writeText(content);
+                                    navigator.clipboard.writeText(`Confirmation of Registration for Vaividhya 2024`);
                                     // toast.success(`${user} Subject Copied.`)
                                 }} />
                             </div>
