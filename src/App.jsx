@@ -17,6 +17,8 @@ function App() {
     const [downloadBtn, setDownloadBtn] = useState(false);
     const [complate, setComplate] = useState([]);
     const [complateSub, setComplateSub] = useState([]);
+    const [eventCount, setEventCount] = useState([]);
+    const [eventCountCopy, setEventCountCopy] = useState([]);
     const [option, setOption] = useState("1");
     var commonConfig = { delimiter: "," };
 
@@ -87,11 +89,229 @@ function App() {
                 downloadFile(value, key, i);
                 i++;
             }
+            downloadFile(eventCount, 'eventCountFile', i);
         } 
     }, [downloadBtn])
 
     useEffect(() => {
         if (Object.keys(JSONFinalData).length > 0) {
+            const data = {}
+            data["Computer"] = [
+                {
+                    "event no": 1,
+                    "Department": "Computer",
+                    "event": "Break the Query",
+                    "No. Person": JSONFinalData["Break the Query"] ? JSONFinalData["Break the Query"].length : 0,
+                    "Ticket No": JSONFinalData["Break the Query"] ? JSONFinalData["Break the Query"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 2,
+                    "Department": "Computer",
+                    "event": "Knowledge Knockout",
+                    "No. Person": JSONFinalData["Knowledge Knockout"] ? JSONFinalData["Knowledge Knockout"].length : 0,
+                    "Ticket No": JSONFinalData["Knowledge Knockout"] ? JSONFinalData["Knowledge Knockout"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 3,
+                    "Department": "Computer",
+                    "event": "Blogoasis",
+                    "No. Person": JSONFinalData["Blogoasis"] ? JSONFinalData["Blogoasis"].length : 0,
+                    "Ticket No": JSONFinalData["Blogoasis"] ? JSONFinalData["Blogoasis"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            data["Civil"] = [
+                {
+                    "event no": 4,
+                    "Department": "Civil",
+                    "event": "Sky Traverse",
+                    "No. Person": JSONFinalData["Sky Traverse"] ? JSONFinalData["Sky Traverse"].length : 0,
+                    "Ticket No": JSONFinalData["Sky Traverse"] ? JSONFinalData["Sky Traverse"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 5,
+                    "Department": "Civil",
+                    "event": "Magical Burst",
+                    "No. Person": JSONFinalData["Magical Burst"] ? JSONFinalData["Magical Burst"].length : 0,
+                    "Ticket No": JSONFinalData["Magical Burst"] ? JSONFinalData["Magical Burst"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 6,
+                    "Department": "Civil",
+                    "event": "Hungry Porter",
+                    "No. Person": JSONFinalData["Hungry Porter"] ? JSONFinalData["Hungry Porter"].length : 0,
+                    "Ticket No": JSONFinalData["Hungry Porter"] ? JSONFinalData["Hungry Porter"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 7,
+                    "Department": "Civil",
+                    "event": "Lost in Clue",
+                    "No. Person": JSONFinalData["Lost in Clue"] ? JSONFinalData["Lost in Clue"].length : 0,
+                    "Ticket No": JSONFinalData["Lost in Clue"] ? JSONFinalData["Lost in Clue"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 8,
+                    "Department": "Civil",
+                    "event": "Lego Craft",
+                    "No. Person": JSONFinalData["Lego Craft"] ? JSONFinalData["Lego Craft"].length : 0,
+                    "Ticket No": JSONFinalData["Lego Craft"] ? JSONFinalData["Lego Craft"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 9,
+                    "Department": "Civil",
+                    "event": "Costuctopia",
+                    "No. Person": JSONFinalData["Costuctopia"] ? JSONFinalData["Costuctopia"].length : 0,
+                    "Ticket No": JSONFinalData["Costuctopia"] ? JSONFinalData["Costuctopia"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            data["E & C"] = [
+                {
+                    "event no": 15,
+                    "Department": "E & C",
+                    "event": "Codevita",
+                    "No. Person": JSONFinalData["Codevita"] ? JSONFinalData["Codevita"].length : 0,
+                    "Ticket No": JSONFinalData["Codevita"] ? JSONFinalData["Codevita"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 16,
+                    "Department": "E & C",
+                    "event": "Auction Mania",
+                    "No. Person": JSONFinalData["Auction Mania"] ? JSONFinalData["Auction Mania"].length : 0,
+                    "Ticket No": JSONFinalData["Auction Mania"] ? JSONFinalData["Auction Mania"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 17,
+                    "Department": "E & C",
+                    "event": "Circuitrix",
+                    "No. Person": JSONFinalData["Circuitrix"] ? JSONFinalData["Circuitrix"].length : 0,
+                    "Ticket No": JSONFinalData["Circuitrix"] ? JSONFinalData["Circuitrix"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 18,
+                    "Department": "E & C",
+                    "event": "Kaun Banega Engineer",
+                    "No. Person": JSONFinalData["Kaun Banega Engineer"] ? JSONFinalData["Kaun Banega Engineer"].length : 0,
+                    "Ticket No": JSONFinalData["Kaun Banega Engineer"] ? JSONFinalData["Kaun Banega Engineer"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            data["MSC IT"] = [
+                {
+                    "event no": 23,
+                    "Department": "MSC IT",
+                    "event": "Code Blind Spot",
+                    "No. Person": JSONFinalData["Code Blind Spot"] ? JSONFinalData["Code Blind Spot"].length : 0,
+                    "Ticket No": JSONFinalData["Code Blind Spot"] ? JSONFinalData["Code Blind Spot"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 24,
+                    "Department": "MSC IT",
+                    "event": "C-Enigma",
+                    "No. Person": JSONFinalData["C-Enigma"] ? JSONFinalData["C-Enigma"].length : 0,
+                    "Ticket No": JSONFinalData["C-Enigma"] ? JSONFinalData["C-Enigma"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            data["Information Technology"] = [
+                {
+                    "event no": 21,
+                    "Department": "Information Technology",
+                    "event": "Imaginarium",
+                    "No. Person": JSONFinalData["Imaginarium"] ? JSONFinalData["Imaginarium"].length : 0,
+                    "Ticket No": JSONFinalData["Imaginarium"] ? JSONFinalData["Imaginarium"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 22,
+                    "Department": "Information Technology",
+                    "event": "Reel Crafter",
+                    "No. Person": JSONFinalData["Reel Crafter"] ? JSONFinalData["Reel Crafter"].length : 0,
+                    "Ticket No": JSONFinalData["Reel Crafter"] ? JSONFinalData["Reel Crafter"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 20,
+                    "Department": "Information Technology",
+                    "event": "Digital Detective",
+                    "No. Person": JSONFinalData["Digital Detective"] ? JSONFinalData["Digital Detective"].length : 0,
+                    "Ticket No": JSONFinalData["Digital Detective"] ? JSONFinalData["Digital Detective"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            data["H & SS"] = [
+                {
+                    "event no": 25,
+                    "Department": "H & SS",
+                    "event": "English Big Bash",
+                    "No. Person": JSONFinalData["English Big Bash"] ? JSONFinalData["English Big Bash"].length : 0,
+                    "Ticket No": JSONFinalData["English Big Bash"] ? JSONFinalData["English Big Bash"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 26,
+                    "Department": "H & SS",
+                    "event": "Physiquest",
+                    "No. Person": JSONFinalData["Physiquest"] ? JSONFinalData["Physiquest"].length : 0,
+                    "Ticket No": JSONFinalData["Physiquest"] ? JSONFinalData["Physiquest"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 27,
+                    "Department": "H & SS",
+                    "event": "Math Brain",
+                    "No. Person": JSONFinalData["Math Brain"] ? JSONFinalData["Math Brain"].length : 0,
+                    "Ticket No": JSONFinalData["Math Brain"] ? JSONFinalData["Math Brain"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            data["BIS"] = [
+                {
+                    "event no": 28,
+                    "Department": "BIS",
+                    "event": "BIS Standard Poster Presentation",
+                    "No. Person": JSONFinalData["BIS Standard Poster Presentation"] ? JSONFinalData["BIS Standard Poster Presentation"].length : 0,
+                    "Ticket No": JSONFinalData["BIS Standard Poster Presentation"] ? JSONFinalData["BIS Standard Poster Presentation"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            data["Drone"] = [
+                {
+                    "event no": 19,
+                    "Department": "Drone",
+                    "event": "Drone Showcase",
+                    "No. Person": JSONFinalData["Drone Showcase"] ? JSONFinalData["Drone Showcase"].length : 0,
+                    "Ticket No": JSONFinalData["Drone Showcase"] ? JSONFinalData["Drone Showcase"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            data["Mechanical"] = [
+                {
+                    "event no": 10,
+                    "Department": "Mechanical",
+                    "event": "Hot Wheels",
+                    "No. Person": JSONFinalData["Hot Wheels"] ? JSONFinalData["Hot Wheels"].length : 0,
+                    "Ticket No": JSONFinalData["Hot Wheels"] ? JSONFinalData["Hot Wheels"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 11,
+                    "Department": "Mechanical",
+                    "event": "Catalupting Firelock",
+                    "No. Person": JSONFinalData["Catalupting Firelock"] ? JSONFinalData["Catalupting Firelock"].length : 0,
+                    "Ticket No": JSONFinalData["Catalupting Firelock"] ? JSONFinalData["Catalupting Firelock"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 12,
+                    "Department": "Mechanical",
+                    "event": "BGMI",
+                    "No. Person": JSONFinalData["BGMI"] ? JSONFinalData["BGMI"].length : 0,
+                    "Ticket No": JSONFinalData["BGMI"] ? JSONFinalData["BGMI"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 13,
+                    "Department": "Mechanical",
+                    "event": "Free Fire Max",
+                    "No. Person": JSONFinalData["Free Fire Max"] ? JSONFinalData["Free Fire Max"].length : 0,
+                    "Ticket No": JSONFinalData["Free Fire Max"] ? JSONFinalData["Free Fire Max"].map(data => data["Tickit no:"]) : []
+                },
+                {
+                    "event no": 14,
+                    "Department": "Mechanical",
+                    "event": "Robo Grip",
+                    "No. Person": JSONFinalData["Robo Grip"] ? JSONFinalData["Robo Grip"].length : 0,
+                    "Ticket No": JSONFinalData["Robo Grip"] ? JSONFinalData["Robo Grip"].map(data => data["Tickit no:"]) : []
+                },
+            ]
+            setEventCountCopy(data);
+            setEventCount([...data["Computer"], ...data["Civil"], ...data["E & C"], ...data["Information Technology"], ...data["H & SS"], ...data["BIS"], ...data["Drone"], ...data["Mechanical"]]);
             setTimeout(() => {
                 setDownloadBtn(true);
             }, 2000);
@@ -295,7 +515,7 @@ SSASIT - Surat`
             {option === '2' && (<>
                 <div className="App">
                 <h2 className="file-upload-heading" htmlFor="">
-                    Upload file hear.
+                Download The Event according csv file. Upload file hear.
                 </h2>
                 <input
                     className="input-file link-sparater"
@@ -307,8 +527,26 @@ SSASIT - Surat`
                             dowloadFile(files[0]);
                         }
                     }}
-                />
-                {downloadBtn && (<button className="btn"onClick={() => downloadAll()} >Download All</button>)}
+                    />
+                    {downloadBtn && (<button className="btn"onClick={() => downloadAll()} >Download Event zip</button>)}
+                {eventCountCopy && Object.keys(eventCountCopy).map(key => {
+                    const value = eventCountCopy[key];
+                    const content = `${key} (Total : ${value.map(data => data["No. Person"]).reduce((total, num) => total + num)})\n\r
+${value.map(data => `${data.event} - ${data["No. Person"]}`).join('\n\r')}`
+                    return(
+                        <>
+                            <div className={`code-box `} >
+                                <Markdown className="code-content">
+                                    {content}
+                                </Markdown>
+                                <img className="code-copy" src={Copy} alt="" onClick={() => {
+                                    navigator.clipboard.writeText(content);
+                                    // toast.success(`${user} Subject Copied.`)
+                                }} />
+                            </div>
+                        </>
+                    )
+                })}
                 <div id="all-link"></div>
             </div>
             </>)}
