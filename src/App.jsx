@@ -86,7 +86,20 @@ function App() {
         if (downloadBtn) {
             let i = 1;
             for (const [key, value] of Object.entries(JSONFinalData)) {
-                downloadFile(value, key, i);
+                const final = value.map(data => {
+                    delete data["Computer Engineering Events"];
+                    delete data["Civil Engineering Events"];
+                    delete data["Mechanical Engineering Events"];
+                    delete data["E & C Engineering Events"];
+                    delete data["MSC IT Events"];
+                    delete data["Information Technology Events"];
+                    delete data["H & SS Events"];
+                    delete data["BIS Event"];
+                    delete data["Drone Event (E & C Dept)"];
+                    return data;
+                })
+
+                downloadFile(final, key, i);
                 i++;
             }
             downloadFile(eventCount, 'eventCountFile', i);
@@ -412,7 +425,7 @@ function App() {
             {CSVData.length > 0 &&
                 CSVData.map((data) => {
                     if(data["Tickit no:"] === "") return null;
-                    
+
                     const comEvent = data["Computer Engineering Events"] !== "" ? JSON.parse(data["Computer Engineering Events"]) : [];
                     const civilEvent = data["Civil Engineering Events"] !== "" ? JSON.parse(data["Civil Engineering Events"]) : [];
                     const mecEvent = data["Mechanical Engineering Events"] !== "" ? JSON.parse(data["Mechanical Engineering Events"]) : [];
