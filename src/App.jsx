@@ -324,7 +324,7 @@ function App() {
                 },
             ]
             setEventCountCopy(data);
-            setEventCount([...data["Computer"], ...data["Civil"], ...data["E & C"], ...data["Information Technology"], ...data["H & SS"], ...data["BIS"], ...data["Drone"], ...data["Mechanical"]]);
+            setEventCount([...data["Computer"], ...data["Civil"], ...data["E & C"], ...data["Information Technology"], ...data["H & SS"], ...data["BIS"], ...data["Drone"], ...data["Mechanical"], ...data["MSC IT"]]);
             setTimeout(() => {
                 setDownloadBtn(true);
             }, 2000);
